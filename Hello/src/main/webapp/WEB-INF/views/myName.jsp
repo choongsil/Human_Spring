@@ -8,6 +8,9 @@
 
 </head>
 <body>
-My name is ${name}
+<p>My name is ${name}</p>
+<p>Mobile Number is ${phone}</p>
+<br>
+<img src="resources/dog.jpg">
 </body>
 </html>

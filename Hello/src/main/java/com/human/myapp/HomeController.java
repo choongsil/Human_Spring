@@ -4,6 +4,8 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -35,11 +37,13 @@ public class HomeController {
 
 		return "home";
 	}
-
-	@RequestMapping(value = "/name1", method = RequestMethod.GET)
-	public String myName(Locale locale, Model model) {
+//...../name?mobile=
+	@RequestMapping(value = "/name", method = RequestMethod.GET)
+	public String myName(HttpServletRequest request, Model model) {
+		String str1= request.getParameter("mobile");
 		String myName = "seo choong sil";
 		model.addAttribute("name", myName);
+		model.addAttribute("phone", str1);
 		return "myName";
 	}
 
