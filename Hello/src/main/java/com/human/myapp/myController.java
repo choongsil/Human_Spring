@@ -10,11 +10,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class myController {
 
-	@RequestMapping(value="/nick", method = RequestMethod.GET)
+	@RequestMapping(value = "/nick", method = RequestMethod.GET)
 	public String showNick(HttpServletRequest req, Model model) {
 		String uid = req.getParameter("userid");
+		String passcode = req.getParameter("password");
+		String region = req.getParameter("city");
 		model.addAttribute("user_id", uid);
-		
+		model.addAttribute("pwd", passcode);
+		model.addAttribute("area", region);
+
 		return "nick";
 	}
 }
