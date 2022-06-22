@@ -67,4 +67,18 @@ public class myController {
 			return "off";
 		}
 	}
+	//아이디 비번 입력 받아서 화면에 출력
+	@RequestMapping("/login")
+	public String doLogin() {
+		return "login";
+	}
+	@RequestMapping("/user_chek")
+	public String doUserCheck(HttpServletRequest req, Model model) {
+		String user_id=req.getParameter("userid");
+		String password=req.getParameter("pwd");
+		model.addAttribute("userid",user_id);
+		model.addAttribute("pwd",password);
+		return "userinfo";
+		
+	}
 }
