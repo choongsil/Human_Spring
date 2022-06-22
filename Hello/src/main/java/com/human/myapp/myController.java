@@ -67,7 +67,7 @@ public class myController {
 			return "off";
 		}
 	}
-	//아이디 비번 입력 받아서 화면에 출력
+	//회원가입 로직
 	@RequestMapping("/login")
 	public String doLogin() {
 		return "login";
@@ -76,9 +76,26 @@ public class myController {
 	public String doUserCheck(HttpServletRequest req, Model model) {
 		String user_id=req.getParameter("userid");
 		String password=req.getParameter("pwd");
-		model.addAttribute("userid",user_id);
-		model.addAttribute("pwd",password);
-		return "userinfo";
+		if(user_id.equals("human")&&password.equals("human123")) {
+			model.addAttribute("userid",user_id);
+			model.addAttribute("pwd",password);
+			return "userinfo";
+		}else {
+			model.addAttribute("userid",user_id);
+			return "signin";
+		}
 		
+	}
+	@RequestMapping("/user_siginin")
+	public String doSignin(HttpServletRequest req, Model model) {
+		String uid=req.getParameter("userid");
+		String pwd=req.getParameter("pwd");
+		String pwd1=req.getParameter("pwd1");
+		if(!pwd.equals(pwd1)) {
+			model.addAttribute("userid",uid);
+			return "signin";
+		}else {
+			return "redirect:/login";
+		}
 	}
 }
