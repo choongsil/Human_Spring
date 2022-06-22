@@ -38,12 +38,17 @@ public class HomeController {
 		return "home";
 	}
 //...../name?mobile=
-	@RequestMapping(value = "/name", method = RequestMethod.GET)
+	@RequestMapping(value = "/gugu", method = RequestMethod.GET)
 	public String myName(HttpServletRequest request, Model model) {
-		String str1= request.getParameter("mobile");
-		String myName = "seo choong sil";
-		model.addAttribute("name", myName);
-		model.addAttribute("phone", str1);
+		String str1= request.getParameter("dan");
+		String y="";
+		for(int i=1;i<10;i++) {
+			y += str1+"X"+i+"="+(Integer.parseInt(str1)*i)+"<br>";
+			
+		}
+		model.addAttribute("dan1",str1);
+		model.addAttribute("dan", y);
+		
 		return "myName";
 	}
 

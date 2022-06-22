@@ -4,13 +4,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>내 이름은</title>
+<title>구구단</title>
 
 </head>
 <body>
-<p>My name is ${name}</p>
-<p>Mobile Number is ${phone}</p>
-<br>
-<img src="resources/dog.jpg">
+<h1>${dan1}단</h1>
+<p>${dan}</p>
+
 </body>
 </html>
