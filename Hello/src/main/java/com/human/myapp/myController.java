@@ -34,16 +34,37 @@ public class myController {
 		} else if (str1.equals("plus")) {
 			model.addAttribute("title", "더하기");
 			model.addAttribute("result", Integer.parseInt(str2) + Integer.parseInt(str3));
+			return "plus";
 		} else if (str1.equals("minus")) {
 			model.addAttribute("title", "빼기");
 			model.addAttribute("result", Integer.parseInt(str2) - Integer.parseInt(str3));
-		}else if(str1.equals("divided")) {
+			return "minus";
+		} else if (str1.equals("div")) {
 			model.addAttribute("title", "나누기");
 			model.addAttribute("result", Integer.parseInt(str2) / Integer.parseInt(str3));
-		}else if(str1.equals("multyply")) {
+		} else if (str1.equals("multi")) {
 			model.addAttribute("title", "곱하기");
 			model.addAttribute("result", Integer.parseInt(str2) * Integer.parseInt(str3));
 		}
 		return "result";
+
+	}
+	@RequestMapping(value = "/computer", method = RequestMethod.GET)
+	public String dosolve(HttpServletRequest req, Model model) {
+		String str1 = req.getParameter("x");
+		String str2 = req.getParameter("y");
+		int x= Integer.parseInt(str1);
+		int y= Integer.parseInt(str2);
+		if(x-y>0) {
+			model.addAttribute("x", x);
+			model.addAttribute("y", y);
+			model.addAttribute("result", x-y);
+			return "on";
+		}else {
+			model.addAttribute("x", x);
+			model.addAttribute("y", y);
+			model.addAttribute("result", x-y);
+			return "off";
+		}
 	}
 }
