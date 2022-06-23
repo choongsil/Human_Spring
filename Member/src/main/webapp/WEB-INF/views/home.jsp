@@ -5,8 +5,14 @@
 	<title>Home</title>
 </head>
 <body>
-<p>${statusLine}</p>
-<p>${newbutton}</p>
+<c:if test="${userinfo==''}">
+<p align=right><a href='login'>Login</a>&nbsp;<a href='signin'>Signin</a>
+</p>
+</c:if>
+<c:if test="${userinfo!=''}">
+<p align=right>${userinfo}&nbsp;<a href='logout'>Logout</a>&nbsp;<a href='signin'>Signin</a>
+</p>
+</c:if>
 <h1>
 	Hello world!  
 </h1>

@@ -6,6 +6,7 @@
 <meta charset="UTF-8">
 <title>로그인</title>
 </head>
+${alert}
 <body>
 <h1>login</h1>
 <form method=GET action="user_chek">

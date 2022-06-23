@@ -28,13 +28,14 @@ public class HomeController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(HttpServletRequest req, Model model) {
 		HttpSession session = req.getSession();
-		if (session.getAttribute("userid") == null) {
-			model.addAttribute("statusLine", "<a href='login'>Login</a>&nbsp;<a href='signin'>Signin</a>");
-			model.addAttribute("newbutton", "");
+		if (session.getAttribute("newuser") == null) {
+			model.addAttribute("userinfo", "");
+//			model.addAttribute("statusLine", "<a href='login'>Login</a>&nbsp;<a href='signin'>Signin</a>");
+//			model.addAttribute("newbutton", "");
 		} else {
-
-			model.addAttribute("statusLine", session.getAttribute("realname") + "&nbsp;<a href='logout'>LogOut</a>");
-			model.addAttribute("newbutton", "<input type=button value='새글쓰기'>");
+			model.addAttribute("userinfo", session.getAttribute("newuser"));
+//			model.addAttribute("statusLine", session.getAttribute("newuser") + "&nbsp;<a href='logout'>LogOut</a>");
+//			model.addAttribute("newbutton", "<input type=button value='새글쓰기'>");
 		}
 		return "home";
 	}
@@ -50,17 +51,21 @@ public class HomeController {
 	public String doUserCheck(HttpServletRequest req, Model model) {
 		String user_id = req.getParameter("userid");
 		String password = req.getParameter("pwd");
-		model.addAttribute("userid", user_id);
-		model.addAttribute("pwd", password);
 		HttpSession session = req.getSession();
-		if (user_id.equals("human") && password.equals("human123")) {
-			session.setAttribute("userid", user_id);
-			session.setAttribute("realname", "서충실");
-//			return "userinfo";
-		} else {
-//			return "signin";
+		if (user_id.equals(session.getAttribute("newuser")) && password.equals(session.getAttribute("newpwd"))) {
+			session.setAttribute("newuser", "서충실");
+			return "redirect:/";
+		} else if(user_id.equals(session.getAttribute("newuser")) && !password.equals(session.getAttribute("newpwd"))) {
+			model.addAttribute("alert","<script>alert('회원정보를 확인해주세요')</script>");
+			return "login";
+		}else if(!user_id.equals(session.getAttribute("newuser")) && password.equals(session.getAttribute("newpwd"))) {
+			model.addAttribute("alert","<script>alert('회원정보를 확인해주세요')</script>");
+			return "login";
+		}else {
+			session.setAttribute("newuser", null);
+			model.addAttribute("alert","<script>alert('회원가입 해주세요')</script>");
+			return "signin";
 		}
-		return "redirect:/";
 
 	}
 
@@ -71,15 +76,18 @@ public class HomeController {
 
 	@RequestMapping("/user_signin")
 	public String douserSignin(HttpServletRequest req, Model model) {
-		System.out.println("check1");
-
+		String userid = req.getParameter("userid");
+		String passcode = req.getParameter("pwd");
+		HttpSession session = req.getSession();
+		session.setAttribute("newuser", userid);
+		session.setAttribute("newpwd", passcode);
 		return "login";
 
 	}
 
 	@RequestMapping("/signin")
 	public String doSignin(HttpServletRequest req, Model model) {
-		System.out.println("check");
+
 		return "signin";
 
 	}
