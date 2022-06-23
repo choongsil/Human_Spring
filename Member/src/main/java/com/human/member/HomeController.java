@@ -53,7 +53,7 @@ public class HomeController {
 		String password = req.getParameter("pwd");
 		HttpSession session = req.getSession();
 		if (user_id.equals(session.getAttribute("newuser")) && password.equals(session.getAttribute("newpwd"))) {
-			session.setAttribute("newuser", "서충실");
+			session.setAttribute("newuser", session.getAttribute("newuser"));
 			return "redirect:/";
 		} else if(user_id.equals(session.getAttribute("newuser")) && !password.equals(session.getAttribute("newpwd"))) {
 			model.addAttribute("alert","<script>alert('회원정보를 확인해주세요')</script>");
@@ -61,11 +61,11 @@ public class HomeController {
 		}else if(!user_id.equals(session.getAttribute("newuser")) && password.equals(session.getAttribute("newpwd"))) {
 			model.addAttribute("alert","<script>alert('회원정보를 확인해주세요')</script>");
 			return "login";
-		}else {
-			session.setAttribute("newuser", null);
+		}else if(!user_id.equals(session.getAttribute("newuser")) && !password.equals(session.getAttribute("newpwd"))){
 			model.addAttribute("alert","<script>alert('회원가입 해주세요')</script>");
-			return "signin";
+			return "login";
 		}
+		return "redirect:/";
 
 	}
 
@@ -90,6 +90,11 @@ public class HomeController {
 
 		return "signin";
 
+	}
+	@RequestMapping("/newpost")
+	public String doNwePost() {
+		
+		return "new";
 	}
 
 }
