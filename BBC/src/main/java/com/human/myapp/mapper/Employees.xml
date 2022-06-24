@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.human.myapp.iEmployee">
+<select id="listEmployees" resultType="com.human.myapp.empDTO">
+	select employee_id, emp_name, salary, manager_id from employees order by emp_name
+</select>
+<insert id="addEmployee">
+	insert into employees values(${param1},${param2},${param3})
+</insert>
+<delete id="removeEmployee">
+	delete from employees where employee_id=${param1}
+</delete>
+</mapper>
