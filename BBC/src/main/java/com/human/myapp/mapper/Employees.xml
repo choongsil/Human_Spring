@@ -6,6 +6,11 @@
 <select id="listEmployees" resultType="com.human.myapp.empDTO">
 	select employee_id, emp_name, salary, manager_id from employees order by emp_name
 </select>
+<select id="getMember" resultType="com.human.myapp.Member">
+	select employee_id, emp_name, salary, manager_id,hire_date,email
+		from employees
+		where employee_id=#{param1}
+</select>
 <insert id="addEmployee">
 	insert into employees values(${param1},${param2},${param3})
 </insert>

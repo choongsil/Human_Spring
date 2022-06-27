@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -47,6 +48,13 @@ public class HomeController {
 		System.out.println("emplist size="+emplist.size());
 		model.addAttribute("list", emplist);
 		return "list";
+	}
+	@RequestMapping("find/{eid}")
+	public String doFind(@PathVariable int eid, Model model) {
+		iEmployee emp=sqlSession.getMapper(iEmployee.class);
+		Member member=emp.getMember(eid);
+		model.addAttribute("member", member);
+		return "find";
 	}
 	@RequestMapping("/menulist")
 	public String domenuList(Model model) {
