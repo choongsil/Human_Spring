@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.human.member.iboard">
+<select id="boardList" resultType="com.human.member.boardDTO">
+	select seqbbs, title, content, writer, created from board order by seqbbs
+</select>
+<insert id="addboard">
+	insert into board values(seqbbs.nextval, #{param1}, #{param2},#{param3}, to_char(sysdate, 'YYYY-MM-DD HH24:mm:ss'))
+</insert>
+<select id="contentslist" resultType="com.human.member.boardDTO">
+	select seqbbs, title, content, writer, created from board where seqbbs=#{param1}
+</select>
+</mapper>

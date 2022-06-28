@@ -21,9 +21,10 @@ th,td {border:1px solid blue;}
 	Hello world!  
 </h1>
 <table align=center>
-<tr><th>작성시간</th><th>제목</th><th>작성자</th><th>조회수</th></tr>
-<tr><td>6월22일</td><td>aaaa</td><td>피터팬</td><td>100</td></tr>
-<tr><td>6월23일</td><td>bbbb</td><td>팅커벨</td><td>200</td></tr>
+<tr><th>게시물번호</th><th>제목</th><th>작성자</th><th>작성날짜</th></tr>
+<c:forEach var="board" items="${list }">
+<tr><td><a href='view/${board.seqbbs }'>${board.seqbbs }</a></td><td>${board.title }</td><td>${board.writer }</td><td>${board.created }</td></tr>
+</c:forEach>
 </table>
 <c:if test="${userinfo!=''}">
 <a href='newpost'>새글쓰기</a>
