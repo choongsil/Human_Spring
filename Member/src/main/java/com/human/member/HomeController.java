@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * Handles requests for the application home page.
@@ -108,8 +109,8 @@ public class HomeController {
 		if (mdto.cnt == 0) {
 			mem.insert(userid, passcode, name, mobile);
 			return "login";
-		}else {
-			model.addAttribute("alret","<script>alert('중복된 아이디 입니다.')</script>");
+		} else {
+			model.addAttribute("alret", "<script>alert('중복된 아이디 입니다.')</script>");
 			return "signin";
 		}
 
@@ -127,21 +128,51 @@ public class HomeController {
 
 		return "new";
 	}
-	@RequestMapping(value="/addboard", method = RequestMethod.POST)
+
+	@RequestMapping(value = "/addboard", method = RequestMethod.POST)
 	public String doaddcontent(HttpServletRequest req) {
-		String title=req.getParameter("title");
-		String content=req.getParameter("content");
+		String title = req.getParameter("title");
+		String content = req.getParameter("content");
 		HttpSession session = req.getSession();
 		String writer = (String) session.getAttribute("userid");
 		iboard bod = sqlSession.getMapper(iboard.class);
 		bod.addboard(title, content, writer);
 		return "redirect:/";
 	}
-	@RequestMapping("/view/{seqbbs}")
-	public String doview(@PathVariable int seqbbs) {
+
+	@RequestMapping("/view")
+	public String doview(HttpServletRequest req, @RequestParam int seqbbs, Model model) {
+		HttpSession session = req.getSession();
+		if (session.getAttribute("userid") == null) {
+			model.addAttribute("userinfo", "");
+			iboard bod = sqlSession.getMapper(iboard.class);
+			boardDTO content = bod.contentslist(seqbbs);
+			model.addAttribute("bdto", content);
+		} else {
+			model.addAttribute("userinfo", session.getAttribute("name"));
+			iboard bod = sqlSession.getMapper(iboard.class);
+			boardDTO content = bod.contentslist(seqbbs);
+			model.addAttribute("bdto", content);
+		}
+
+		return "view";
+	}
+
+	@RequestMapping("/delete")
+	public String doDelete(@RequestParam int seqbbs) {
 		iboard bod = sqlSession.getMapper(iboard.class);
-		ArrayList<boardDTO> content = bod.contentslist();
-		return "";
+		bod.deleteBoard(seqbbs);
+		return "redirect:/";
+	}
+
+	@RequestMapping(value = "/modify", method = RequestMethod.POST)
+	public String doModify(HttpServletRequest req) {
+		int seqbbs=Integer.parseInt(req.getParameter("seqbbs"));
+		String title = req.getParameter("title");
+		String content = req.getParameter("content");
+		iboard bod = sqlSession.getMapper(iboard.class);
+		bod.modyBoard(title, content, seqbbs);
+		return "redirect:/";
 	}
 
 }
