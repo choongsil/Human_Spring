@@ -40,7 +40,7 @@ public class HomeController {
 //			model.addAttribute("statusLine", "<a href='login'>Login</a>&nbsp;<a href='signin'>Signin</a>");
 //			model.addAttribute("newbutton", "");
 		} else {
-			model.addAttribute("userinfo", session.getAttribute("name"));
+			model.addAttribute("userinfo", session.getAttribute("userid"));
 //			model.addAttribute("statusLine", session.getAttribute("newuser") + "&nbsp;<a href='logout'>LogOut</a>");
 //			model.addAttribute("newbutton", "<input type=button value='새글쓰기'>");
 		}
@@ -143,31 +143,37 @@ public class HomeController {
 	@RequestMapping("/view")
 	public String doview(HttpServletRequest req, @RequestParam int seqbbs, Model model) {
 		HttpSession session = req.getSession();
-		if (session.getAttribute("userid") == null) {
+		iboard bod = sqlSession.getMapper(iboard.class);
+		boardDTO content = bod.contentslist(seqbbs);
+		if (session.getAttribute("userid") == null||!content.writer.equals(session.getAttribute("userid"))) {
 			model.addAttribute("userinfo", "");
-			iboard bod = sqlSession.getMapper(iboard.class);
-			boardDTO content = bod.contentslist(seqbbs);
 			model.addAttribute("bdto", content);
+			return "view";
 		} else {
 			model.addAttribute("userinfo", session.getAttribute("name"));
-			iboard bod = sqlSession.getMapper(iboard.class);
-			boardDTO content = bod.contentslist(seqbbs);
 			model.addAttribute("bdto", content);
+			return "view";
 		}
 
-		return "view";
 	}
 
 	@RequestMapping("/delete")
-	public String doDelete(@RequestParam int seqbbs) {
+	public String doDelete(@RequestParam int seqbbs, HttpServletRequest req, Model model) {
 		iboard bod = sqlSession.getMapper(iboard.class);
-		bod.deleteBoard(seqbbs);
-		return "redirect:/";
+		boardDTO bdto = bod.contentslist(seqbbs);
+		HttpSession session = req.getSession();
+		if (bdto.writer.equals(session.getAttribute("userid"))) {
+			bod.deleteBoard(seqbbs);
+			return "redirect:/";
+		} else {
+			return "redirect:/";
+		}
+
 	}
 
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
 	public String doModify(HttpServletRequest req) {
-		int seqbbs=Integer.parseInt(req.getParameter("seqbbs"));
+		int seqbbs = Integer.parseInt(req.getParameter("seqbbs"));
 		String title = req.getParameter("title");
 		String content = req.getParameter("content");
 		iboard bod = sqlSession.getMapper(iboard.class);
