@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.human.booking.iRoom">
+	<select id="getRoomList"
+		resultType="com.human.booking.RoomManagementDTO">
+		select roomnumber, roomname, min, price, roomtype from
+		roomservice
+	</select>
+	<delete id="deleteroom">
+		delete from roomservice where roomnumber=#{parma1}
+	</delete>
+	<insert id="insertroom">
+		insert into roomservice
+		values(roomnumber.nextval,#{param1},#{param2},#{param3},#{param4})
+	</insert>
+	<update id="updateroom">
+		update roomservice set roomname=#{param1},
+		roomtype=#{param2},
+		min=#{param3}, price=#{param4} where roomnumber=#{param5}
+	</update>
+</mapper>

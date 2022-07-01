@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.human.booking.iReserve">
+	<select id="noreservelist"
+		resultType="com.human.booking.reserveDTO">
+		select roomnumber, roomname, price, min from roomservice where
+		roomtype=#{param1}
+		and min>=#{param2} and roomnumber not in (select
+		reroomnum from reserve
+		where roomtype=#{param3} and recnt>=#{param2}
+		and(checkin between #{param4} and #{param5} OR checkout between
+		#{param4}
+		and #{param5} or(checkin <![CDATA[ <= ]]>
+		#{param4} and checkout <![CDATA[ >= ]]>
+		#{param5})))
+	</select>
+	<select id="reservelist"
+		resultType="com.human.booking.reserveDTO">
+		select b.roomnumber, b.roomname, a.renum, a.checkin, a.checkout,
+		a.name
+		from reserve a, roomservice b
+		where b.roomtype=#{param1} and
+		a.recnt>=#{param2}
+		and (a.checkin between #{param3} and #{param4} or
+		a.checkout between #{param3}
+		and #{param4}
+		or(a.checkin <![CDATA[ <= ]]>
+		#{param3} and a.checkout <![CDATA[ >= ]]>
+		#{param4}))
+		and a.reroomnum = b.roomnumber
+	</select>
+	<insert id="insertReserve">
+		insert into reserve
+		values(reservenum.nextval,#{param1},#{param2},#{param3},#{param4},#{param5},#{param6},#{param7},#{param8})
+	</insert>
+	<update id="updateReserve">
+		update reserve set name=#{param1}, mobile=#{param2},
+		recnt=#{param3} where renum=#{param4}
+	</update>
+	<delete id="deleteReserve">
+		delete from reserve where renum=#{param1}
+	</delete>
+	<select id="updatelist"
+		resultType="com.human.booking.reserveDTO">
+		select a.renum, b.roomname, a.recnt, a.reprice, a.name,
+		a.mobile, a.checkin,
+		a.checkout, c.type_name
+		from reserve a, roomservice
+		b, roomtype c
+		where a.reroomnum=b.roomnumber and a.roomtype=c.type_id
+		and a.renum=#{param1}
+	</select>
+</mapper>
