@@ -54,50 +54,36 @@ th, td {
 			return false;
 		}
 		if($(this).val()=='추가'){
-		$.ajax({
-			url:'addnew',
-			data:{
-				name:$('#name').val(),
-				price:$('#price').val()
-			},
-			dataType:'json',
-			type:'get',
-			success:function(data){
-				showMenu();
-				$('#btnReset').trigger('click');
-			}
-		});
-		}else{
-			$.ajax({
-				url:'change',
-				data:{
-					name:$('#name').val(),
-					price:$('#price').val(),
-					seqno:$('#seqno').val()
-				},
-				dataType:'json',
-				type:'get',
-				success:function(data){
-					console.log(data);
+		$.get(
+				"addnew",
+				{name:$('#name').val(),price:$('#price').val()},
+				function(data){
 					showMenu();
 					$('#btnReset').trigger('click');
-				}
-			});
+				},"json");
+		}else{
+			$.get(
+				"change",
+				{name:$('#name').val(), price:$('#price').val(),seqno:$('#seqno').val()},
+				function(data){
+					showMenu();
+					$('#btnReset').trigger('click');},
+				"json"
+			);
 		}
 	})
 	.on('click','#btnDelete',function(){
 		let seqno=$(this).attr('seqno');
 		console.log(seqno);
-		$.ajax({
-			url:'delete',
-			data:{seqno:seqno},
-			dataType:'json',
-			type:'get',
-			success:function(data){
-				console.log(data);
-				showMenu();
-			}
-		});
+		$.get(
+				"delete",
+				{seqno:seqno},
+				function(data){
+								showMenu();
+								$('#btnReset').trigger('click');
+				},
+				"json"
+		);
 	})
 	.on('click','#tblData tr:gt(0)',function(){
 		let seqno=$(this).find('td:eq(0)').text();
@@ -116,15 +102,10 @@ th, td {
 		return false;
 	})
 	function showMenu(){
-		$.ajax({
-			url : 'menulist',
-			data : '',
-			dataType : 'json',
-			type : 'get',
-			beforeSend:function(){
+		$.get(
+			"menulist",
+			function(data){
 				$('#tblData tr:gt(0)').remove();
-				},
-			success : function(data) {
 				for (let i = 0; i < data.length; i++) {
 					menuitem = data[i];
 					let str = '<tr><td>' + menuitem['seqno']
@@ -132,9 +113,10 @@ th, td {
 							+ '</td><td>' + menuitem['price']
 							+ '</td><td><button id=btnDelete seqno='+menuitem['seqno']+'>삭제</button></td></tr>';
 					$('#tblData').append(str);
-				}
-			}
-		});
+					}
+				
+			},"json"
+		);
 	}
 </script>
 </html>
